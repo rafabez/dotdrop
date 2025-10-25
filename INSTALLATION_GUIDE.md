@@ -6,7 +6,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/dotdrop.git
+git clone https://github.com/rafabez/dotdrop.git
 cd dotdrop
 
 # 2. Generate icons
@@ -30,7 +30,7 @@ python3 generate_icons.py
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/dotdrop.git
+git clone https://github.com/rafabez/dotdrop.git
 cd dotdrop
 
 # 2. Generate icons
@@ -176,7 +176,7 @@ After installation:
 
 - 📖 Read the [full README](README.md)
 - 🚀 Check the [Quick Start Guide](QUICKSTART.md)
-- 🐛 [Report an issue](https://github.com/yourusername/dotdrop/issues)
+- 🐛 [Report an issue](https://github.com/rafabez/dotdrop/issues)
 
 ---
 

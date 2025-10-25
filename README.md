@@ -161,7 +161,7 @@ Open your terminal and run:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotdrop.git
+git clone https://github.com/rafabez/dotdrop.git
 
 # Navigate into the directory
 cd dotdrop
@@ -231,7 +231,7 @@ Open your terminal and run:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dotdrop.git
+git clone https://github.com/rafabez/dotdrop.git
 
 # Navigate into the directory
 cd dotdrop
@@ -427,7 +427,7 @@ sudo pacman -S python python-pip
    - Or toggle it off and on
 
 4. **Create an issue:**
-   - Visit the [GitHub Issues](https://github.com/yourusername/dotdrop/issues) page
+   - Visit the [GitHub Issues](https://github.com/rafabez/dotdrop/issues) page
    - Include: Browser version, error messages, and steps to reproduce
 
 ## 🚀 Usage Guide
@@ -1027,7 +1027,7 @@ Try manual scanning or check the browser console for errors.
 - Dark mode UI theme
 - Mobile browser support
 
-**Want a feature?** [Open an issue](https://github.com/yourusername/dotdrop/issues) with your suggestion!
+**Want a feature?** [Open an issue](https://github.com/rafabez/dotdrop/issues) with your suggestion!
 
 ## 📄 License
 
@@ -1036,7 +1036,7 @@ This project is licensed under the **MIT License**.
 ```
 MIT License
 
-Copyright (c) 2024 DotDrop Contributors
+Copyright (c) 2025 DotDrop Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1059,7 +1059,7 @@ furnished to do so, subject to the following conditions:
 ## 📞 Support & Contact
 
 ### 🐛 Found a Bug?
-1. Check [existing issues](https://github.com/yourusername/dotdrop/issues)
+1. Check [existing issues](https://github.com/rafabez/dotdrop/issues)
 2. Create a new issue with:
    - Browser and version
    - Extension version
@@ -1070,7 +1070,7 @@ furnished to do so, subject to the following conditions:
 ### 💡 Have a Question?
 - Read this README thoroughly
 - Check the [FAQ section](#-frequently-asked-questions)
-- Review [closed issues](https://github.com/yourusername/dotdrop/issues?q=is%3Aissue+is%3Aclosed)
+- Review [closed issues](https://github.com/rafabez/dotdrop/issues?q=is%3Aissue+is%3Aclosed)
 - Open a new issue with the "question" label
 
 ### 🔒 Security Vulnerability?
@@ -1136,7 +1136,7 @@ Your stars help others discover this tool and motivate continued development.
 
 ### 🔗 Quick Links
 
-[📖 Documentation](README.md) • [🚀 Quick Start](QUICKSTART.md) • [🤝 Contributing](CONTRIBUTING.md) • [📝 License](LICENSE) • [🐛 Report Issue](https://github.com/yourusername/dotdrop/issues)
+[📖 Documentation](README.md) • [🚀 Quick Start](QUICKSTART.md) • [🤝 Contributing](CONTRIBUTING.md) • [📝 License](LICENSE) • [🐛 Report Issue](https://github.com/rafabez/dotdrop/issues)
 
 ---
 
@@ -1150,6 +1150,6 @@ Your stars help others discover this tool and motivate continued development.
 
 ---
 
-**© 2024 DotDrop Contributors | Licensed under MIT**
+**© 2025 DotDrop Contributors | Licensed under MIT**
 
 </div>

@@ -198,7 +198,7 @@
 ### Build Process
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/dotdrop.git
+git clone https://github.com/rafabez/dotdrop.git
 
 # 2. Generate icons
 python3 generate_icons.py
@@ -316,6 +316,6 @@ zip -r dotdrop.zip . -x "*.git*" "*.md" "generate_icons.py"
 
 **Built with ❤️ for the security community**
 
-Last Updated: 2024
+Last Updated: 2025
 Version: 1.0.0
 License: MIT
