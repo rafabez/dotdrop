@@ -1,0 +1,43 @@
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Node modules (if ever added)
+node_modules/
+
+# Build files
+dist/
+build/
+*.zip
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Extension packaging
+*.crx
+*.xpi
+*.pem
+
+# Temporary files
+*.tmp
+*.temp

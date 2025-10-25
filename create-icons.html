@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Icons</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // Simple icon generator for the extension
+    // Open this file in a browser and it will download the icons
+    
+    const sizes = [16, 32, 48, 128];
+    
+    function createIcon(size, isWarning = false) {
+      const canvas = document.getElementById('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+      
+      // Background circle
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      if (isWarning) {
+        gradient.addColorStop(0, '#ef4444');
+        gradient.addColorStop(1, '#dc2626');
+      } else {
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size / 2 - 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Lock icon
+      ctx.fillStyle = '#ffffff';
+      
+      // Lock body
+      const lockWidth = size * 0.4;
+      const lockHeight = size * 0.35;
+      const lockX = (size - lockWidth) / 2;
+      const lockY = size * 0.45;
+      
+      ctx.fillRect(lockX, lockY, lockWidth, lockHeight);
+      
+      // Lock shackle
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = size * 0.08;
+      ctx.beginPath();
+      ctx.arc(size / 2, lockY - size * 0.05, lockWidth / 3, Math.PI, 0, false);
+      ctx.stroke();
+      
+      // Keyhole
+      ctx.fillStyle = isWarning ? '#ef4444' : '#667eea';
+      ctx.beginPath();
+      ctx.arc(size / 2, lockY + lockHeight * 0.35, size * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillRect(size / 2 - size * 0.03, lockY + lockHeight * 0.35, size * 0.06, lockHeight * 0.35);
+      
+      return canvas.toDataURL('image/png');
+    }
+    
+    function downloadIcon(dataUrl, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = dataUrl;
+      link.click();
+    }
+    
+    // Generate normal icons
+    sizes.forEach(size => {
+      const dataUrl = createIcon(size, false);
+      downloadIcon(dataUrl, `icon${size}.png`);
+    });
+    
+    // Generate warning icons
+    sizes.forEach(size => {
+      const dataUrl = createIcon(size, true);
+      downloadIcon(dataUrl, `icon-warning${size}.png`);
+    });
+    
+    document.body.innerHTML += '<h1>Icons generated! Check your downloads folder.</h1>';
+  </script>
+</body>
+</html>
