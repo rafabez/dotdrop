@@ -91,7 +91,11 @@ function loadDetections() {
     const detectionsList = document.getElementById('detectionsList');
     
     if (Object.keys(detectedSites).length === 0) {
-      detectionsList.innerHTML = '<p style="text-align: center; color: #6b7280;">No detections yet</p>';
+      detectionsList.textContent = '';
+      const p = document.createElement('p');
+      p.style.cssText = 'text-align: center; color: #6b7280;';
+      p.textContent = 'No detections yet';
+      detectionsList.appendChild(p);
       return;
     }
     
@@ -103,33 +107,57 @@ function loadDetections() {
       return maxSeverityA - maxSeverityB;
     });
     
-    detectionsList.innerHTML = sortedSites.map(([domain, data]) => {
+    detectionsList.textContent = '';
+    
+    sortedSites.forEach(([domain, data]) => {
       const criticalCount = data.files.filter(f => f.severity === 'critical').length;
       const severity = criticalCount > 0 ? 'critical' : 
                       data.files.some(f => f.severity === 'medium') ? 'medium' : 'low';
       
       const firstDetected = new Date(data.firstDetected).toLocaleString();
       
-      return `
-        <div class="detection-card ${severity}">
-          <div class="detection-header">
-            <div class="detection-domain">${domain}</div>
-            <span class="severity-badge severity-${severity}">${severity.toUpperCase()}</span>
-          </div>
-          <div style="font-size: 12px; color: #9ca3af; margin-bottom: 10px;">
-            First detected: ${firstDetected}
-          </div>
-          <div class="detection-files">
-            ${data.files.map(file => `
-              <div class="detection-file">
-                ${getSeverityIcon(file.severity)} ${file.path} 
-                <span style="color: #9ca3af;">(${file.category})</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }).join('');
+      const card = document.createElement('div');
+      card.className = `detection-card ${severity}`;
+      
+      const header = document.createElement('div');
+      header.className = 'detection-header';
+      
+      const domainDiv = document.createElement('div');
+      domainDiv.className = 'detection-domain';
+      domainDiv.textContent = domain;
+      
+      const badge = document.createElement('span');
+      badge.className = `severity-badge severity-${severity}`;
+      badge.textContent = severity.toUpperCase();
+      
+      header.appendChild(domainDiv);
+      header.appendChild(badge);
+      card.appendChild(header);
+      
+      const dateDiv = document.createElement('div');
+      dateDiv.style.cssText = 'font-size: 12px; color: #9ca3af; margin-bottom: 10px;';
+      dateDiv.textContent = `First detected: ${firstDetected}`;
+      card.appendChild(dateDiv);
+      
+      const filesDiv = document.createElement('div');
+      filesDiv.className = 'detection-files';
+      
+      data.files.forEach(file => {
+        const fileDiv = document.createElement('div');
+        fileDiv.className = 'detection-file';
+        fileDiv.textContent = `${getSeverityIcon(file.severity)} ${file.path} `;
+        
+        const categorySpan = document.createElement('span');
+        categorySpan.style.color = '#9ca3af';
+        categorySpan.textContent = `(${file.category})`;
+        fileDiv.appendChild(categorySpan);
+        
+        filesDiv.appendChild(fileDiv);
+      });
+      
+      card.appendChild(filesDiv);
+      detectionsList.appendChild(card);
+    });
   });
 }
 
@@ -176,24 +204,42 @@ function loadPatternGroups() {
   const categories = ['vcs', 'env', 'ssh', 'aws', 'docker', 'database', 'secrets', 'config', 'backup', 'ci', 'shell'];
   const container = document.getElementById('patternGroups');
   
-  container.innerHTML = categories.map(cat => `
-    <div class="setting-item">
-      <div class="setting-label">
-        <div class="setting-name">${cat.toUpperCase()}</div>
-        <div class="setting-description">Enable ${cat} file detection</div>
-      </div>
-      <div class="toggle active" data-category="${cat}">
-        <div class="toggle-slider"></div>
-      </div>
-    </div>
-  `).join('');
+  container.textContent = '';
   
-  // Add click handlers
-  container.querySelectorAll('.toggle').forEach(toggle => {
+  categories.forEach(cat => {
+    const item = document.createElement('div');
+    item.className = 'setting-item';
+    
+    const label = document.createElement('div');
+    label.className = 'setting-label';
+    
+    const name = document.createElement('div');
+    name.className = 'setting-name';
+    name.textContent = cat.toUpperCase();
+    
+    const desc = document.createElement('div');
+    desc.className = 'setting-description';
+    desc.textContent = `Enable ${cat} file detection`;
+    
+    label.appendChild(name);
+    label.appendChild(desc);
+    
+    const toggle = document.createElement('div');
+    toggle.className = 'toggle active';
+    toggle.dataset.category = cat;
+    
+    const slider = document.createElement('div');
+    slider.className = 'toggle-slider';
+    toggle.appendChild(slider);
+    
     toggle.addEventListener('click', function() {
       this.classList.toggle('active');
       // In a full implementation, this would update background.js SENSITIVE_PATHS
     });
+    
+    item.appendChild(label);
+    item.appendChild(toggle);
+    container.appendChild(item);
   });
 }
 

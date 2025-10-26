@@ -65,12 +65,23 @@ function loadDetections() {
     totalDetections.textContent = siteCount;
     
     if (siteCount === 0) {
-      detectionsList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">✨</div>
-          <div class="empty-state-text">No exposures detected yet</div>
-        </div>
-      `;
+      // Clear and create empty state safely
+      detectionsList.textContent = '';
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      
+      const icon = document.createElement('div');
+      icon.className = 'empty-state-icon';
+      icon.textContent = '✨';
+      
+      const text = document.createElement('div');
+      text.className = 'empty-state-text';
+      text.textContent = 'No exposures detected yet';
+      
+      emptyState.appendChild(icon);
+      emptyState.appendChild(text);
+      detectionsList.appendChild(emptyState);
+      
       totalDetections.className = 'status-value status-safe';
       return;
     }
@@ -83,37 +94,64 @@ function loadDetections() {
       return maxSeverityA - maxSeverityB;
     });
     
-    detectionsList.innerHTML = sortedSites.map(([domain, data]) => {
+    // Clear list safely
+    detectionsList.textContent = '';
+    
+    sortedSites.forEach(([domain, data]) => {
       const criticalCount = data.files.filter(f => f.severity === 'critical').length;
       const severity = criticalCount > 0 ? 'critical' : 
                       data.files.some(f => f.severity === 'medium') ? 'medium' : 'low';
       
       const timeAgo = getTimeAgo(data.firstDetected);
       
-      return `
-        <div class="detection-item ${severity}">
-          <div class="detection-domain">
-            🌐 ${domain}
-            <span class="severity-badge severity-${severity}">${severity.toUpperCase()}</span>
-            <span style="font-size: 10px; opacity: 0.6; margin-left: auto;">⏱️ ${timeAgo}</span>
-          </div>
-          <div class="detection-files">
-            ${data.files.slice(0, 12).map(file => `
-              <div class="detection-file" title="${file.url || file.path}">
-                ${getSeverityIcon(file.severity)} ${file.path}
-              </div>
-            `).join('')}
-            ${data.files.length > 12 ? `
-              <div class="detection-file more-files">
-                <a href="#" class="view-all-link" data-domain="${domain}">
-                  ... and ${data.files.length - 12} more (click to view all)
-                </a>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
+      // Create detection item
+      const item = document.createElement('div');
+      item.className = `detection-item ${severity}`;
+      
+      // Create domain header
+      const domainDiv = document.createElement('div');
+      domainDiv.className = 'detection-domain';
+      domainDiv.textContent = `🌐 ${domain} `;
+      
+      const badge = document.createElement('span');
+      badge.className = `severity-badge severity-${severity}`;
+      badge.textContent = severity.toUpperCase();
+      domainDiv.appendChild(badge);
+      
+      const timeSpan = document.createElement('span');
+      timeSpan.style.cssText = 'font-size: 10px; opacity: 0.6; margin-left: auto;';
+      timeSpan.textContent = `⏱️ ${timeAgo}`;
+      domainDiv.appendChild(timeSpan);
+      
+      item.appendChild(domainDiv);
+      
+      // Create files list
+      const filesDiv = document.createElement('div');
+      filesDiv.className = 'detection-files';
+      
+      data.files.slice(0, 12).forEach(file => {
+        const fileDiv = document.createElement('div');
+        fileDiv.className = 'detection-file';
+        fileDiv.title = file.url || file.path;
+        fileDiv.textContent = `${getSeverityIcon(file.severity)} ${file.path}`;
+        filesDiv.appendChild(fileDiv);
+      });
+      
+      if (data.files.length > 12) {
+        const moreDiv = document.createElement('div');
+        moreDiv.className = 'detection-file more-files';
+        const link = document.createElement('a');
+        link.href = '#';
+        link.className = 'view-all-link';
+        link.dataset.domain = domain;
+        link.textContent = `... and ${data.files.length - 12} more (click to view all)`;
+        moreDiv.appendChild(link);
+        filesDiv.appendChild(moreDiv);
+      }
+      
+      item.appendChild(filesDiv);
+      detectionsList.appendChild(item);
+    });
     
     // Update total detections badge color
     const hasCritical = sortedSites.some(([_, data]) => 
