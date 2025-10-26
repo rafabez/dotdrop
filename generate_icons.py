@@ -17,11 +17,11 @@ def create_icon(size, is_warning=False):
     img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
-    # Colors
+    # Colors - Hacker theme
     if is_warning:
-        bg_color = (239, 68, 68, 255)  # Red
+        bg_color = (255, 0, 0, 255)  # Terminal red (#ff0000)
     else:
-        bg_color = (102, 126, 234, 255)  # Purple
+        bg_color = (255, 119, 0, 255)  # Hacker orange (#ff7700)
     
     # Draw circle background
     margin = 2
@@ -52,7 +52,7 @@ def create_icon(size, is_warning=False):
              180, 0, fill=lock_color, width=shackle_thickness)
     
     # Keyhole
-    keyhole_color = bg_color if not is_warning else (239, 68, 68, 255)
+    keyhole_color = bg_color
     keyhole_radius = int(size * 0.06)
     keyhole_y = lock_y + int(lock_height * 0.35)
     

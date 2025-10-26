@@ -9,19 +9,16 @@
 git clone https://github.com/interzone/dotdrop.git
 cd dotdrop
 
-# 2. Generate icons
-python3 generate_icons.py
-
-# 3. Open browser extensions page
+# 2. Open browser extensions page
 #    Chrome: chrome://extensions/
 #    Edge: edge://extensions/
 #    Brave: brave://extensions/
 
-# 4. Enable "Developer mode" (toggle in top-right)
+# 3. Enable "Developer mode" (toggle in top-right)
 
-# 5. Click "Load unpacked"
+# 4. Click "Load unpacked"
 
-# 6. Select the dotdrop folder
+# 5. Select the dotdrop folder
 
 # ✅ Done! Extension is now active
 ```
@@ -33,15 +30,12 @@ python3 generate_icons.py
 git clone https://github.com/interzone/dotdrop.git
 cd dotdrop
 
-# 2. Generate icons
-python3 generate_icons.py
-
-# 3. Open Firefox debugging page
+# 2. Open Firefox debugging page
 #    Type: about:debugging#/runtime/this-firefox
 
-# 4. Click "Load Temporary Add-on..."
+# 3. Click "Load Temporary Add-on..."
 
-# 5. Select the manifest.json file
+# 4. Select the manifest.json file
 
 # ✅ Done! Extension is now active (until browser restart)
 ```
@@ -50,9 +44,9 @@ python3 generate_icons.py
 
 ### Chrome Installation (Detailed)
 
-1. **Clone & Setup**
+1. **Clone Repository**
    ```
-   Terminal → git clone → cd dotdrop → python3 generate_icons.py
+   Terminal → git clone → cd dotdrop
    ```
 
 2. **Open Extensions**
@@ -74,15 +68,15 @@ python3 generate_icons.py
 5. **Verify**
    ```
    ✓ DotDrop appears in extension list
-   ✓ Purple lock icon 🔒 in toolbar
+   ✓ Orange lock icon 🔒 in toolbar
    ✓ Status shows "Enabled"
    ```
 
 ### Firefox Installation (Detailed)
 
-1. **Clone & Setup**
+1. **Clone Repository**
    ```
-   Terminal → git clone → cd dotdrop → python3 generate_icons.py
+   Terminal → git clone → cd dotdrop
    ```
 
 2. **Open Debugging Page**
@@ -101,46 +95,11 @@ python3 generate_icons.py
 4. **Verify**
    ```
    ✓ DotDrop appears under "Temporary Extensions"
-   ✓ Purple lock icon 🔒 in toolbar
+   ✓ Orange lock icon 🔒 in toolbar
    ✓ Shows version 1.0.0
    ```
 
 ## Common Issues
-
-### Issue: "python3: command not found"
-
-**Windows:**
-```bash
-python generate_icons.py  # Use 'python' instead of 'python3'
-```
-
-**Mac/Linux:**
-```bash
-# Install Python
-# Mac: brew install python3
-# Ubuntu: sudo apt-get install python3
-# Fedora: sudo dnf install python3
-```
-
-### Issue: "No module named 'PIL'"
-
-```bash
-pip3 install Pillow
-# or
-pip install Pillow
-```
-
-### Issue: Icons not appearing
-
-```bash
-# Verify icons directory exists
-ls -la icons/
-
-# If empty, regenerate
-python3 generate_icons.py
-
-# Should see 8 icon files
-```
 
 ### Issue: Extension not loading
 
@@ -153,21 +112,6 @@ python3 generate_icons.py
 - Make sure you selected manifest.json FILE, not folder
 - Check browser console for errors
 - Try Firefox Developer Edition
-
-### Issue: "background.service_worker is currently disabled"
-
-**Firefox compatibility fix:**
-
-```bash
-# Use Firefox-compatible manifest
-./use-firefox-manifest.sh
-
-# Then reload the extension in Firefox
-```
-
-This switches to Manifest V2 which Firefox fully supports.
-
-To switch back for Chrome: `./use-chrome-manifest.sh`
 
 ## What's Next?
 
