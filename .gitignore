@@ -44,3 +44,6 @@ yarn-error.log*
 
 # Test site with mock secrets (prevent accidental push)
 test-site/
+
+# Test site setup documentation (contains mock secret patterns)
+docs/TEST_SITE_SETUP.md
