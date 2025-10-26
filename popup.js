@@ -1,11 +1,12 @@
 // DotDrop Popup Script
 
+// Global variables for filter state
+let currentFilter = 'all';
+let allDetectedSites = {};
+
 document.addEventListener('DOMContentLoaded', async () => {
   // Get current tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  
-  let currentFilter = 'all';
-  let allDetectedSites = {};
 
   // Load detections
   loadDetections();
@@ -53,15 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.openOptionsPage();
   });
   
-  // Filter buttons
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentFilter = btn.dataset.filter;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
-      btn.classList.add('filter-active');
-      applyFilter();
-    });
-  });
+  // Filter buttons - attach event listeners
+  attachFilterListeners();
   
   // Start progress polling
   startProgressPolling();
@@ -294,9 +288,28 @@ function copyFindings() {
   });
 }
 
+// Attach filter button listeners
+function attachFilterListeners() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      currentFilter = this.dataset.filter;
+      console.log('Filter clicked:', currentFilter); // Debug
+      
+      // Update active state
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
+      this.classList.add('filter-active');
+      
+      // Apply filter
+      applyFilter();
+    });
+  });
+}
+
 // Apply severity filter
 function applyFilter() {
+  console.log('Applying filter:', currentFilter); // Debug
   const items = document.querySelectorAll('.detection-item');
+  console.log('Found items:', items.length); // Debug
   
   items.forEach(item => {
     if (currentFilter === 'all') {
