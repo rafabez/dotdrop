@@ -1,7 +1,6 @@
 // DotDrop Options Script
 
 let settings = {
-  notifications: true,
   autoScan: true,
   criticalOnly: false
 };
@@ -58,9 +57,6 @@ function loadSettings() {
       settings = response.settings;
       
       // Update toggles
-      if (settings.notifications) {
-        document.getElementById('notificationsToggle').classList.add('active');
-      }
       if (settings.autoScan) {
         document.getElementById('autoScanToggle').classList.add('active');
       }

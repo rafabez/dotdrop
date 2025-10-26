@@ -172,7 +172,6 @@ const SENSITIVE_PATHS = {
 // Store detected exposures
 let detectedSites = {};
 let settings = {
-  notifications: true,
   autoScan: true,
   criticalOnly: false
 };
@@ -302,21 +301,6 @@ function handleDetection(domain, files, tabId) {
   // Update badge
   updateBadge(tabId, files.length);
   
-  // Show notification
-  if (settings.notifications) {
-    showNotification(domain, files);
-  }
-  
-  // Show page banner
-  chrome.tabs.sendMessage(tabId, {
-    action: 'showBanner',
-    files: files,
-    domain: domain
-  }).catch(err => {
-    // Content script might not be ready yet, that's ok
-    console.log('DotDrop: Could not show banner (content script not ready)');
-  });
-  
   // Update icon to warning state
   updateIcon(tabId, true);
 }
@@ -344,30 +328,6 @@ function updateIcon(tabId, hasExposure) {
       48: `${iconPath}48.png`,
       128: `${iconPath}128.png`
     }
-  });
-}
-
-// Function to show notification
-function showNotification(domain, files) {
-  const criticalFiles = files.filter(f => f.severity === 'critical');
-  const title = criticalFiles.length > 0 ? '🚨 CRITICAL SECURITY EXPOSURE!' : '⚠️ Security Exposure Detected';
-  
-  let message = `Found ${files.length} exposed file(s) on ${domain}:\n`;
-  files.slice(0, 3).forEach(file => {
-    message += `\n• ${file.path} (${file.severity})`;
-  });
-  
-  if (files.length > 3) {
-    message += `\n... and ${files.length - 3} more`;
-  }
-  
-  chrome.notifications.create({
-    type: 'basic',
-    iconUrl: 'icons/icon128.png',
-    title: title,
-    message: message,
-    priority: criticalFiles.length > 0 ? 2 : 1,
-    requireInteraction: criticalFiles.length > 0
   });
 }
 
