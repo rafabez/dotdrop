@@ -26,7 +26,7 @@ DotDrop features a dark, terminal-inspired interface designed for security profe
 --text-muted: #484f58;      /* Muted text */
 
 /* Accent Colors */
---accent-primary: #00ff41;  /* Matrix green */
+--accent-primary: #ff7700;  /* Hacker orange */
 --accent-critical: #ff0000; /* Terminal red */
 --accent-warning: #ffa500;  /* Terminal orange */
 --accent-info: #00bfff;     /* Terminal cyan */
@@ -36,12 +36,12 @@ DotDrop features a dark, terminal-inspired interface designed for security profe
 
 ```css
 /* Status Colors */
---status-safe: #00ff41;     /* Green - No issues */
+--status-safe: #ff7700;     /* Orange - No issues */
 --status-warning: #ffa500;  /* Orange - Medium severity */
 --status-critical: #ff0000; /* Red - Critical issues */
 
 /* Interactive States */
---hover-glow: rgba(0, 255, 65, 0.3);
+--hover-glow: rgba(255, 119, 0, 0.3);
 --critical-glow: rgba(255, 0, 0, 0.3);
 --warning-glow: rgba(255, 165, 0, 0.3);
 ```
@@ -119,19 +119,19 @@ font-size: 11px;
 text-transform: uppercase;
 
 /* Hover */
-border-color: #00ff41;
-color: #00ff41;
-box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+border-color: #ff7700;
+color: #ff7700;
+box-shadow: 0 0 5px rgba(255, 119, 0, 0.3);
 
 /* Primary Button */
 background: #0d1117;
-border-color: #00ff41;
-color: #00ff41;
+border-color: #ff7700;
+color: #ff7700;
 
 /* Primary Hover */
-background: #00ff41;
+background: #ff7700;
 color: #0a0e27;
-box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+box-shadow: 0 0 10px rgba(255, 119, 0, 0.5);
 ```
 
 ### Status Badges
@@ -149,8 +149,8 @@ color: #ffa500;
 
 /* Safe */
 background: #0d1117;
-border: 1px solid #00ff41;
-color: #00ff41;
+border: 1px solid #ff7700;
+color: #ff7700;
 ```
 
 ### Detection Cards
@@ -176,9 +176,9 @@ background: #21262d;
 border: 1px solid #30363d;
 
 /* On State */
-background: #00ff41;
-border-color: #00ff41;
-box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+background: #ff7700;
+border-color: #ff7700;
+box-shadow: 0 0 10px rgba(255, 119, 0, 0.3);
 ```
 
 ---
@@ -188,14 +188,14 @@ box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
 ### Glow Effects
 
 ```css
-/* Green glow for interactive elements */
-box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+/* Orange glow for interactive elements */
+box-shadow: 0 0 5px rgba(255, 119, 0, 0.3);
 
 /* Red glow for critical states */
 box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
 
 /* Text glow on hover */
-text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+text-shadow: 0 0 5px rgba(255, 119, 0, 0.5);
 ```
 
 ### Animations
@@ -222,9 +222,9 @@ transition: all 0.2s ease;
 
 /* Buttons */
 hover: {
-  border-color: #00ff41;
-  color: #00ff41;
-  box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+  border-color: #ff7700;
+  color: #ff7700;
+  box-shadow: 0 0 5px rgba(255, 119, 0, 0.3);
 }
 ```
 
@@ -240,7 +240,7 @@ background: #0d1117;
 background: #30363d;
 
 /* Thumb Hover */
-background: #00ff41;
+background: #ff7700;
 ```
 
 ---
@@ -249,7 +249,7 @@ background: #00ff41;
 
 - **GitHub Dark Theme**: Base colors and surface elevations
 - **Terminal Emulators**: Monospace fonts, sharp edges
-- **Matrix**: Green accent color (#00ff41)
+- **Hacker Culture**: Orange accent color (#ff7700)
 - **Hacker Aesthetic**: Minimal, functional, dark
 - **Security Tools**: Professional, no-nonsense interface
 
@@ -262,7 +262,7 @@ background: #00ff41;
 | **Colors** | Purple gradient | Dark terminal |
 | **Corners** | Rounded (8-16px) | Sharp (0px) |
 | **Fonts** | Sans-serif | Monospace |
-| **Accent** | Purple | Matrix green |
+| **Accent** | Purple | Hacker orange |
 | **Padding** | Generous | Minimal |
 | **Style** | Friendly, modern | Professional, hacker |
 | **Buttons** | Rounded, gradient | Sharp, bordered |
@@ -292,4 +292,4 @@ background: #00ff41;
 
 **Style**: Terminal • Professional • Hacker  
 **Mood**: Dark • Focused • Secure  
-**Vibe**: Matrix • GitHub • Security Tools
+**Vibe**: Orange • GitHub Dark • Security Tools
