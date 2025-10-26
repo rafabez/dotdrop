@@ -1,9 +1,5 @@
 // DotDrop Popup Script
 
-// Global variables for filter state
-let currentFilter = 'all';
-let allDetectedSites = {};
-
 document.addEventListener('DOMContentLoaded', async () => {
   // Get current tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -54,9 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.openOptionsPage();
   });
   
-  // Filter buttons - attach event listeners
-  attachFilterListeners();
-  
   // Start progress polling
   startProgressPolling();
 });
@@ -79,27 +72,8 @@ function loadDetections() {
         </div>
       `;
       totalDetections.className = 'status-value status-safe';
-      document.getElementById('severityFilters').style.display = 'none';
       return;
     }
-    
-    // Count by severity for filters
-    let allCount = 0, criticalCountTotal = 0, mediumCountTotal = 0, lowCountTotal = 0;
-    Object.values(detectedSites).forEach(site => {
-      site.files.forEach(file => {
-        allCount++;
-        if (file.severity === 'critical') criticalCountTotal++;
-        else if (file.severity === 'medium') mediumCountTotal++;
-        else if (file.severity === 'low') lowCountTotal++;
-      });
-    });
-    
-    // Update filter counts
-    document.getElementById('countAll').textContent = allCount;
-    document.getElementById('countCritical').textContent = criticalCountTotal;
-    document.getElementById('countMedium').textContent = mediumCountTotal;
-    document.getElementById('countLow').textContent = lowCountTotal;
-    document.getElementById('severityFilters').style.display = 'flex';
     
     // Sort sites by severity
     const sortedSites = Object.entries(detectedSites).sort((a, b) => {
@@ -285,42 +259,6 @@ function copyFindings() {
     navigator.clipboard.writeText(text).then(() => {
       showToast('✅ Copied to clipboard!');
     });
-  });
-}
-
-// Attach filter button listeners
-function attachFilterListeners() {
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      currentFilter = this.dataset.filter;
-      console.log('Filter clicked:', currentFilter); // Debug
-      
-      // Update active state
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
-      this.classList.add('filter-active');
-      
-      // Apply filter
-      applyFilter();
-    });
-  });
-}
-
-// Apply severity filter
-function applyFilter() {
-  console.log('Applying filter:', currentFilter); // Debug
-  const items = document.querySelectorAll('.detection-item');
-  console.log('Found items:', items.length); // Debug
-  
-  items.forEach(item => {
-    if (currentFilter === 'all') {
-      item.style.display = 'block';
-    } else {
-      if (item.classList.contains(currentFilter)) {
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    }
   });
 }
 

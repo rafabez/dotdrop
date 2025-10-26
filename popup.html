@@ -153,34 +153,6 @@
       background: rgba(255, 255, 255, 0.3);
     }
     
-    .severity-filters {
-      display: flex;
-    }
-    
-    .filter-btn {
-      padding: 6px 12px;
-      font-size: 11px;
-      font-family: 'Courier New', monospace;
-      border: 1px solid #30363d;
-      background: #0a0e27;
-      color: #8b949e;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.2s;
-    }
-    
-    .filter-btn:hover {
-      border-color: #ff7700;
-      color: #ff7700;
-    }
-    
-    .filter-btn.filter-active {
-      background: #ff7700;
-      color: #0a0e27;
-      border-color: #ff7700;
-      font-weight: bold;
-    }
-    
     .detections {
       max-height: 300px;
       overflow-y: auto;
@@ -358,13 +330,6 @@
     <button class="btn btn-primary" id="scanBtn">🔍 Scan Now</button>
     <button class="btn btn-secondary" id="copyBtn" title="Copy findings to clipboard">📋 Copy</button>
     <button class="btn btn-secondary" id="settingsBtn">⚙️ Settings</button>
-  </div>
-  
-  <div class="severity-filters" id="severityFilters" style="display: none; padding: 8px 20px; background: #0d1117; border-bottom: 1px solid #21262d; gap: 8px; flex-wrap: wrap;">
-    <button class="filter-btn filter-active" data-filter="all">All (<span id="countAll">0</span>)</button>
-    <button class="filter-btn" data-filter="critical">Critical (<span id="countCritical">0</span>)</button>
-    <button class="filter-btn" data-filter="medium">Medium (<span id="countMedium">0</span>)</button>
-    <button class="filter-btn" data-filter="low">Low (<span id="countLow">0</span>)</button>
   </div>
   
   <div class="detections" id="detections">

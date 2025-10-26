@@ -18,7 +18,6 @@ DotDrop automatically scans websites for exposed sensitive files like `.git`, `.
 - 🚨 Real-time alerts with traffic light system (🟢🟠🔴)
 - 📊 Live scan progress tracking
 - 📋 One-click copy findings to clipboard
-- 🎯 Severity filtering (All/Critical/Medium/Low)
 - ⏱️ Detection age/freshness timestamps
 - 🥷 Stealth mode for production sites
 - 📦 Batch domain scanning
@@ -102,12 +101,6 @@ DotDrop checks for exposed:
 - Shows current/total paths being checked
 - Updates every 500ms during active scans
 - Automatically hides when scan completes
-
-**🎯 Severity Filtering**
-- Filter by: All, Critical, Medium, or Low
-- Live count badges for each severity level
-- One-click toggle between filters
-- Only visible when detections exist
 
 **📋 Copy Findings**
 - One-click copy to clipboard
@@ -264,7 +257,6 @@ This tool is for **ethical security research and educational purposes only**. Al
 - ✅ Traffic light icon system (🟢🟠🔴)
 - ✅ Real-time scan progress tracking
 - ✅ One-click copy findings to clipboard
-- ✅ Severity filtering (All/Critical/Medium/Low)
 - ✅ Detection age/freshness indicators
 - ✅ Stealth mode for production sites
 - ✅ Batch domain scanning
