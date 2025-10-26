@@ -110,7 +110,7 @@ To add new sensitive file paths:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rafabez/dotdrop.git
+   git clone https://github.com/interzone/dotdrop.git
    cd dotdrop
    ```
 

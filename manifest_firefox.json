@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "DotDrop - Sensitive File Detector",
   "version": "1.0.0",
   "description": "Detects exposed sensitive files like .git, .env, SSH keys, and configuration files on websites you visit",
@@ -7,14 +7,12 @@
     "webRequest",
     "storage",
     "notifications",
-    "activeTab"
-  ],
-  "host_permissions": [
+    "activeTab",
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js",
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "content_scripts": [
     {
@@ -23,7 +21,7 @@
       "run_at": "document_end"
     }
   ],
-  "action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
@@ -42,10 +40,5 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "web_accessible_resources": [
-    {
-      "resources": ["sounds/alert.mp3"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  "web_accessible_resources": ["sounds/alert.mp3"]
 }

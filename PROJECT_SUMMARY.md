@@ -198,7 +198,7 @@
 ### Build Process
 ```bash
 # 1. Clone repository
-git clone https://github.com/rafabez/dotdrop.git
+git clone https://github.com/interzone/dotdrop.git
 
 # 2. Generate icons
 python3 generate_icons.py

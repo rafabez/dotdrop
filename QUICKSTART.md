@@ -166,7 +166,7 @@ Visit any website and the extension will automatically scan for exposed files.
 - [Full Documentation](README.md)
 - [Contributing Guide](CONTRIBUTING.md)
 - [License](LICENSE)
-- [Report issues on GitHub](https://github.com/rafabez/dotdrop/issues)
+- [Report issues on GitHub](https://github.com/interzone/dotdrop/issues)
 
 ---
 
