@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Get current tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   
+  let currentFilter = 'all';
+  let allDetectedSites = {};
+
   // Load detections
   loadDetections();
   
@@ -18,6 +21,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => loadDetections(), 2000);
       }
     });
+    document.getElementById('scanProgressContainer').style.display = 'flex';
+  });
+  
+  // Copy button
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    copyFindings();
   });
   
   // Settings button
@@ -43,6 +52,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     chrome.runtime.openOptionsPage();
   });
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentFilter = btn.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('filter-active'));
+      btn.classList.add('filter-active');
+      applyFilter();
+    });
+  });
+  
+  // Start progress polling
+  startProgressPolling();
 });
 
 // Load and display detections
@@ -63,8 +85,27 @@ function loadDetections() {
         </div>
       `;
       totalDetections.className = 'status-value status-safe';
+      document.getElementById('severityFilters').style.display = 'none';
       return;
     }
+    
+    // Count by severity for filters
+    let allCount = 0, criticalCountTotal = 0, mediumCountTotal = 0, lowCountTotal = 0;
+    Object.values(detectedSites).forEach(site => {
+      site.files.forEach(file => {
+        allCount++;
+        if (file.severity === 'critical') criticalCountTotal++;
+        else if (file.severity === 'medium') mediumCountTotal++;
+        else if (file.severity === 'low') lowCountTotal++;
+      });
+    });
+    
+    // Update filter counts
+    document.getElementById('countAll').textContent = allCount;
+    document.getElementById('countCritical').textContent = criticalCountTotal;
+    document.getElementById('countMedium').textContent = mediumCountTotal;
+    document.getElementById('countLow').textContent = lowCountTotal;
+    document.getElementById('severityFilters').style.display = 'flex';
     
     // Sort sites by severity
     const sortedSites = Object.entries(detectedSites).sort((a, b) => {
@@ -79,11 +120,14 @@ function loadDetections() {
       const severity = criticalCount > 0 ? 'critical' : 
                       data.files.some(f => f.severity === 'medium') ? 'medium' : 'low';
       
+      const timeAgo = getTimeAgo(data.firstDetected);
+      
       return `
         <div class="detection-item ${severity}">
           <div class="detection-domain">
             🌐 ${domain}
             <span class="severity-badge severity-${severity}">${severity.toUpperCase()}</span>
+            <span style="font-size: 10px; opacity: 0.6; margin-left: auto;">⏱️ ${timeAgo}</span>
           </div>
           <div class="detection-files">
             ${data.files.slice(0, 12).map(file => `
@@ -152,10 +196,134 @@ function getSeverityIcon(severity) {
   }
 }
 
+// Get time ago string
+function getTimeAgo(timestamp) {
+  const now = new Date();
+  const then = new Date(timestamp);
+  const seconds = Math.floor((now - then) / 1000);
+  
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 4) return `${weeks}w ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
+
 // Show toast notification (simple version)
 function showToast(message) {
   // Could implement a toast notification here
   console.log(message);
+}
+
+// Poll for scan progress
+function startProgressPolling() {
+  setInterval(() => {
+    chrome.runtime.sendMessage({ action: 'getScanProgress' }, (response) => {
+      if (response && response.progress) {
+        const { scanning, current, total } = response.progress;
+        const progressContainer = document.getElementById('scanProgressContainer');
+        const progressText = document.getElementById('scanProgress');
+        
+        if (scanning) {
+          progressContainer.style.display = 'flex';
+          progressText.textContent = `${current}/${total}`;
+        } else {
+          progressContainer.style.display = 'none';
+        }
+      }
+    });
+  }, 500);
+}
+
+// Copy findings to clipboard
+function copyFindings() {
+  chrome.runtime.sendMessage({ action: 'getDetections' }, (response) => {
+    const detectedSites = response.detectedSites;
+    if (Object.keys(detectedSites).length === 0) {
+      showToast('No detections to copy');
+      return;
+    }
+    
+    let text = '# DotDrop Security Findings\n\n';
+    text += `Generated: ${new Date().toLocaleString()}\n\n`;
+    
+    Object.entries(detectedSites).forEach(([domain, data]) => {
+      text += `## ${domain}\n`;
+      text += `First Detected: ${new Date(data.firstDetected).toLocaleString()}\n\n`;
+      
+      const critical = data.files.filter(f => f.severity === 'critical');
+      const medium = data.files.filter(f => f.severity === 'medium');
+      const low = data.files.filter(f => f.severity === 'low');
+      
+      if (critical.length > 0) {
+        text += `### Critical (${critical.length})\n`;
+        critical.forEach(f => {
+          text += `- ${f.path} (${f.description})\n`;
+        });
+        text += '\n';
+      }
+      
+      if (medium.length > 0) {
+        text += `### Medium (${medium.length})\n`;
+        medium.forEach(f => {
+          text += `- ${f.path} (${f.description})\n`;
+        });
+        text += '\n';
+      }
+      
+      if (low.length > 0) {
+        text += `### Low (${low.length})\n`;
+        low.forEach(f => {
+          text += `- ${f.path} (${f.description})\n`;
+        });
+        text += '\n';
+      }
+      
+      text += '\n---\n\n';
+    });
+    
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('✅ Copied to clipboard!');
+    });
+  });
+}
+
+// Apply severity filter
+function applyFilter() {
+  const items = document.querySelectorAll('.detection-item');
+  
+  items.forEach(item => {
+    if (currentFilter === 'all') {
+      item.style.display = 'block';
+    } else {
+      if (item.classList.contains(currentFilter)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    }
+  });
+}
+
+// Show toast notification
+function showToast(message) {
+  const scanBtn = document.getElementById('scanBtn');
+  const originalText = scanBtn.textContent;
+  scanBtn.textContent = message;
+  scanBtn.style.background = '#00ff41';
+  scanBtn.style.color = '#0a0e27';
+  
+  setTimeout(() => {
+    scanBtn.textContent = originalText;
+    scanBtn.style.background = '';
+    scanBtn.style.color = '';
+  }, 2000);
 }
 
 // Event delegation for view-all links

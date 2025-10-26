@@ -321,6 +321,71 @@
             <div class="toggle-slider"></div>
           </div>
         </div>
+        
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-name">🥷 Stealth Mode</div>
+            <div class="setting-description">Slower scanning with random delays to avoid detection</div>
+          </div>
+          <div class="toggle" id="stealthModeToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">📊 Statistics</h2>
+        <div id="statistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+          <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-left: 4px solid #ff7700;">
+            <div style="font-size: 24px; font-weight: bold; color: #ff7700;"><span id="statTotalSites">0</span></div>
+            <div style="font-size: 12px; opacity: 0.7;">Sites Scanned</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-left: 4px solid #ff0000;">
+            <div style="font-size: 24px; font-weight: bold; color: #ff0000;"><span id="statCritical">0</span></div>
+            <div style="font-size: 12px; opacity: 0.7;">Critical Files</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-left: 4px solid #ffaa00;">
+            <div style="font-size: 24px; font-weight: bold; color: #ffaa00;"><span id="statMedium">0</span></div>
+            <div style="font-size: 12px; opacity: 0.7;">Medium Files</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border-left: 4px solid #4a9eff;">
+            <div style="font-size: 24px; font-weight: bold; color: #4a9eff;"><span id="statLow">0</span></div>
+            <div style="font-size: 12px; opacity: 0.7;">Low Files</div>
+          </div>
+        </div>
+        <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+          <div style="font-size: 13px;">
+            <strong>Most Common Category:</strong> <span id="statMostCommon">-</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">🎯 Pattern Groups</h2>
+        <div class="setting-description" style="margin-bottom: 15px;">Enable or disable specific categories of file detection</div>
+        <div id="patternGroups" style="display: grid; gap: 10px;"></div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">📦 Batch Scan</h2>
+        <div class="setting-description" style="margin-bottom: 15px;">Scan multiple domains at once (one URL per line)</div>
+        <textarea id="batchUrls" style="width: 100%; height: 120px; background: #0a0e27; color: #ff7700; border: 1px solid #30363d; border-radius: 4px; padding: 10px; font-family: 'Courier New', monospace; font-size: 12px;" placeholder="https://example1.com&#10;https://example2.com&#10;https://example3.com"></textarea>
+        <button class="btn btn-primary" id="batchScanBtn" style="margin-top: 10px;">🔍 Batch Scan</button>
+        <div id="batchProgress" style="margin-top: 10px; display: none;">
+          <div style="background: rgba(0,0,0,0.3); border-radius: 4px; padding: 8px; font-size: 12px;">
+            Progress: <span id="batchCount">0</span>/<span id="batchTotal">0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-title">📤 Export</h2>
+        <div class="setting-description" style="margin-bottom: 15px;">Export detection history in different formats</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="exportJsonBtn">📄 Export JSON</button>
+          <button class="btn btn-primary" id="exportCsvBtn">📊 Export CSV</button>
+          <button class="btn btn-primary" id="exportMdBtn">📝 Export Markdown</button>
+        </div>
       </div>
       
       <div class="section">

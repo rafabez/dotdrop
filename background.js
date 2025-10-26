@@ -173,7 +173,16 @@ const SENSITIVE_PATHS = {
 let detectedSites = {};
 let settings = {
   autoScan: true,
-  criticalOnly: false
+  criticalOnly: false,
+  stealthMode: false
+};
+
+// Track scan progress
+let scanProgress = {
+  scanning: false,
+  current: 0,
+  total: 0,
+  domain: ''
 };
 
 // Load settings from storage
@@ -281,6 +290,14 @@ async function scanUrl(url, tabId) {
   const paths = getEnabledPaths();
   const foundFiles = [];
   
+  // Initialize scan progress
+  scanProgress = {
+    scanning: true,
+    current: 0,
+    total: paths.length,
+    domain: baseUrl
+  };
+  
   // Check paths in batches to avoid overwhelming the server
   const batchSize = 5;
   for (let i = 0; i < paths.length; i += batchSize) {
@@ -295,9 +312,16 @@ async function scanUrl(url, tabId) {
       }
     });
     
-    // Small delay between batches
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Update progress
+    scanProgress.current = Math.min(i + batchSize, paths.length);
+    
+    // Small delay between batches (stealth mode = longer delay)
+    const delay = settings.stealthMode ? 500 : 100;
+    await new Promise(resolve => setTimeout(resolve, delay));
   }
+  
+  // Mark scan as complete
+  scanProgress.scanning = false;
   
   if (foundFiles.length > 0) {
     handleDetection(baseUrl, foundFiles, tabId);
@@ -351,6 +375,48 @@ function updateBadge(tabId, count) {
     tabId: tabId,
     color: count > 0 ? '#FF0000' : '#00FF00'
   });
+}
+
+// Function to calculate statistics
+function calculateStatistics() {
+  const totalSites = Object.keys(detectedSites).length;
+  let totalFiles = 0;
+  let criticalCount = 0;
+  let mediumCount = 0;
+  let lowCount = 0;
+  const categoryCount = {};
+  
+  Object.values(detectedSites).forEach(site => {
+    site.files.forEach(file => {
+      totalFiles++;
+      if (file.severity === 'critical') criticalCount++;
+      else if (file.severity === 'medium') mediumCount++;
+      else if (file.severity === 'low') lowCount++;
+      
+      categoryCount[file.category] = (categoryCount[file.category] || 0) + 1;
+    });
+  });
+  
+  // Find most common category
+  let mostCommon = null;
+  let maxCount = 0;
+  Object.entries(categoryCount).forEach(([category, count]) => {
+    if (count > maxCount) {
+      maxCount = count;
+      mostCommon = category;
+    }
+  });
+  
+  return {
+    totalSites,
+    totalFiles,
+    criticalCount,
+    mediumCount,
+    lowCount,
+    mostCommonCategory: mostCommon,
+    mostCommonCount: maxCount,
+    categoryBreakdown: categoryCount
+  };
 }
 
 // Function to update icon
@@ -415,6 +481,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   
   if (request.action === 'getSettings') {
     sendResponse({ settings });
+    return true;
+  }
+  
+  if (request.action === 'getScanProgress') {
+    sendResponse({ progress: scanProgress });
+    return true;
+  }
+  
+  if (request.action === 'getStatistics') {
+    const stats = calculateStatistics();
+    sendResponse({ statistics: stats });
     return true;
   }
 });
