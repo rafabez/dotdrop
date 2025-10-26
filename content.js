@@ -12,56 +12,51 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Function to play alert sound
 function playAlertSound() {
   try {
-    // Create audio element
-    const audio = new Audio();
-    audio.volume = 0.5;
-    
-    // Use a data URL for a simple beep sound (sine wave)
+    // Create AudioContext - browsers may require user interaction first
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
     
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    // Resume audio context in case it's suspended (Chrome autoplay policy)
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().then(() => {
+        console.log('AudioContext resumed');
+      }).catch(err => {
+        console.warn('Could not resume AudioContext:', err);
+      });
+    }
     
-    oscillator.frequency.value = 800; // Frequency in Hz
-    oscillator.type = 'sine';
+    // Create three beeps with increasing pitch
+    const beeps = [
+      { frequency: 800, delay: 0 },
+      { frequency: 1000, delay: 0.15 },
+      { frequency: 1200, delay: 0.3 }
+    ];
     
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+    beeps.forEach(({ frequency, delay }) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = frequency;
+      oscillator.type = 'sine';
+      
+      const startTime = audioContext.currentTime + delay;
+      const duration = 0.1;
+      
+      gainNode.gain.setValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+      
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration);
+    });
     
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
-    
-    // Play three beeps for critical alert
-    setTimeout(() => {
-      const oscillator2 = audioContext.createOscillator();
-      const gainNode2 = audioContext.createGain();
-      oscillator2.connect(gainNode2);
-      gainNode2.connect(audioContext.destination);
-      oscillator2.frequency.value = 1000;
-      oscillator2.type = 'sine';
-      gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-      oscillator2.start(audioContext.currentTime);
-      oscillator2.stop(audioContext.currentTime + 0.5);
-    }, 200);
-    
-    setTimeout(() => {
-      const oscillator3 = audioContext.createOscillator();
-      const gainNode3 = audioContext.createGain();
-      oscillator3.connect(gainNode3);
-      gainNode3.connect(audioContext.destination);
-      oscillator3.frequency.value = 1200;
-      oscillator3.type = 'sine';
-      gainNode3.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode3.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-      oscillator3.start(audioContext.currentTime);
-      oscillator3.stop(audioContext.currentTime + 0.5);
-    }, 400);
+    console.log('🔊 DotDrop: Alert sound triggered');
     
   } catch (error) {
-    console.error('Failed to play alert sound:', error);
+    console.error('❌ DotDrop: Failed to play alert sound:', error);
+    console.warn('💡 Sound may be blocked by browser autoplay policy. Try clicking on the page first.');
   }
 }
 

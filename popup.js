@@ -86,13 +86,17 @@ function loadDetections() {
             <span class="severity-badge severity-${severity}">${severity.toUpperCase()}</span>
           </div>
           <div class="detection-files">
-            ${data.files.slice(0, 5).map(file => `
+            ${data.files.slice(0, 12).map(file => `
               <div class="detection-file">
                 ${getSeverityIcon(file.severity)} ${file.path}
               </div>
             `).join('')}
-            ${data.files.length > 5 ? `
-              <div class="detection-file">... and ${data.files.length - 5} more</div>
+            ${data.files.length > 12 ? `
+              <div class="detection-file more-files">
+                <a href="#" onclick="chrome.runtime.openOptionsPage(); return false;">
+                  ... and ${data.files.length - 12} more (click to view all)
+                </a>
+              </div>
             ` : ''}
           </div>
         </div>

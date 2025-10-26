@@ -353,6 +353,28 @@ ls -la icons/
 3. Ensure all referenced files (background.js, content.js, etc.) exist
 4. Try using Firefox Developer Edition for better debugging
 
+**Error:** "background.service_worker is currently disabled. Add background.scripts."
+
+**Solution:**
+Firefox has limited Manifest V3 support. Use the Firefox-compatible manifest:
+
+```bash
+# Switch to Firefox-compatible manifest
+./use-firefox-manifest.sh
+
+# Or manually:
+cp manifest_firefox.json manifest.json
+
+# Then load in Firefox
+```
+
+To switch back to Chrome:
+```bash
+./use-chrome-manifest.sh
+```
+
+**Note:** The default `manifest.json` now includes both `service_worker` and `scripts` for cross-browser compatibility. If you still get this error, use the Firefox-specific manifest above.
+
 ---
 
 ### Problem: Extension Doesn't Appear in Toolbar

@@ -154,6 +154,21 @@ python3 generate_icons.py
 - Check browser console for errors
 - Try Firefox Developer Edition
 
+### Issue: "background.service_worker is currently disabled"
+
+**Firefox compatibility fix:**
+
+```bash
+# Use Firefox-compatible manifest
+./use-firefox-manifest.sh
+
+# Then reload the extension in Firefox
+```
+
+This switches to Manifest V2 which Firefox fully supports.
+
+To switch back for Chrome: `./use-chrome-manifest.sh`
+
 ## What's Next?
 
 After installation:
