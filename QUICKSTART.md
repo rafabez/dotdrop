@@ -46,7 +46,6 @@ Visit any website and the extension will automatically scan for exposed files.
 1. Click the DotDrop icon
 2. Click **"⚙️ Settings"**
 3. Customize:
-   - Toggle sound alerts
    - Enable/disable notifications
    - Set auto-scan preferences
    - View detection history

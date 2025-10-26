@@ -181,7 +181,6 @@ After installation:
 2. **Configure settings:**
    - Click DotDrop icon → Settings
    - Adjust notification preferences
-   - Enable/disable sound alerts
 
 3. **Start scanning:**
    - Auto-scan works automatically

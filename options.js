@@ -1,7 +1,6 @@
 // DotDrop Options Script
 
 let settings = {
-  soundAlerts: true,
   notifications: true,
   autoScan: true,
   criticalOnly: false
@@ -15,11 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('notificationsToggle').addEventListener('click', function() {
     this.classList.toggle('active');
     settings.notifications = this.classList.contains('active');
-  });
-  
-  document.getElementById('soundAlertsToggle').addEventListener('click', function() {
-    this.classList.toggle('active');
-    settings.soundAlerts = this.classList.contains('active');
   });
   
   document.getElementById('autoScanToggle').addEventListener('click', function() {
@@ -66,9 +60,6 @@ function loadSettings() {
       // Update toggles
       if (settings.notifications) {
         document.getElementById('notificationsToggle').classList.add('active');
-      }
-      if (settings.soundAlerts) {
-        document.getElementById('soundAlertsToggle').classList.add('active');
       }
       if (settings.autoScan) {
         document.getElementById('autoScanToggle').classList.add('active');

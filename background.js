@@ -172,7 +172,6 @@ const SENSITIVE_PATHS = {
 // Store detected exposures
 let detectedSites = {};
 let settings = {
-  soundAlerts: true,
   notifications: true,
   autoScan: true,
   criticalOnly: false
@@ -308,11 +307,6 @@ function handleDetection(domain, files, tabId) {
     showNotification(domain, files);
   }
   
-  // Play sound alert
-  if (settings.soundAlerts) {
-    playSoundAlert();
-  }
-  
   // Update icon to warning state
   updateIcon(tabId, true);
 }
@@ -364,16 +358,6 @@ function showNotification(domain, files) {
     message: message,
     priority: criticalFiles.length > 0 ? 2 : 1,
     requireInteraction: criticalFiles.length > 0
-  });
-}
-
-// Function to play sound alert
-function playSoundAlert() {
-  // Send message to content script to play sound
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]) {
-      chrome.tabs.sendMessage(tabs[0].id, { action: 'playAlert' });
-    }
   });
 }
 
