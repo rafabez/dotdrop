@@ -87,13 +87,13 @@ function loadDetections() {
           </div>
           <div class="detection-files">
             ${data.files.slice(0, 12).map(file => `
-              <div class="detection-file">
+              <div class="detection-file" title="${file.url || file.path}">
                 ${getSeverityIcon(file.severity)} ${file.path}
               </div>
             `).join('')}
             ${data.files.length > 12 ? `
               <div class="detection-file more-files">
-                <a href="#" onclick="chrome.runtime.openOptionsPage(); return false;">
+                <a href="#" class="view-all-link" data-domain="${domain}">
                   ... and ${data.files.length - 12} more (click to view all)
                 </a>
               </div>
@@ -157,3 +157,11 @@ function showToast(message) {
   // Could implement a toast notification here
   console.log(message);
 }
+
+// Event delegation for view-all links
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('view-all-link')) {
+    e.preventDefault();
+    chrome.runtime.openOptionsPage();
+  }
+});

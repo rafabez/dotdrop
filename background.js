@@ -215,28 +215,60 @@ function getEnabledPaths() {
 async function checkPath(baseUrl, pathInfo) {
   try {
     const fullUrl = new URL(pathInfo.path, baseUrl).href;
-    const response = await fetch(fullUrl, {
-      method: 'HEAD',
-      mode: 'no-cors',
-      cache: 'no-cache'
-    });
     
-    // Due to no-cors, we can't check status directly
-    // We'll use a GET request with a timeout for more accurate detection
-    const getResponse = await Promise.race([
-      fetch(fullUrl, { method: 'GET' }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
+    // Try GET request with timeout
+    const response = await Promise.race([
+      fetch(fullUrl, { 
+        method: 'GET',
+        cache: 'no-cache',
+        redirect: 'manual' // Don't follow redirects
+      }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
     ]);
     
-    if (getResponse.ok && getResponse.status === 200) {
-      return {
-        found: true,
-        url: fullUrl,
-        ...pathInfo
-      };
+    // Must be exactly 200 (not 301, 302, etc)
+    if (response.status !== 200) {
+      return null;
     }
+    
+    // Check content type - reject HTML error pages
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('text/html')) {
+      // Likely an error page, not the actual file
+      return null;
+    }
+    
+    // Check response size - too large is suspicious
+    const contentLength = response.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > 1000000) { // 1MB max
+      return null;
+    }
+    
+    // Read first 1KB to validate content
+    const text = await response.text();
+    const firstKB = text.substring(0, 1024);
+    
+    // Check if it looks like an error page
+    if (firstKB.toLowerCase().includes('<!doctype html') ||
+        firstKB.toLowerCase().includes('<html') ||
+        firstKB.toLowerCase().includes('404') ||
+        firstKB.toLowerCase().includes('not found')) {
+      return null;
+    }
+    
+    // Passed all checks - likely a real exposed file
+    return {
+      found: true,
+      url: fullUrl,
+      path: pathInfo.path,
+      category: pathInfo.category,
+      severity: pathInfo.severity,
+      description: pathInfo.description,
+      size: text.length
+    };
+    
   } catch (error) {
-    // File not found or network error
+    // File not found, timeout, or network error
   }
   return null;
 }
