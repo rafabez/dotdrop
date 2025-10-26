@@ -307,6 +307,16 @@ function handleDetection(domain, files, tabId) {
     showNotification(domain, files);
   }
   
+  // Show page banner
+  chrome.tabs.sendMessage(tabId, {
+    action: 'showBanner',
+    files: files,
+    domain: domain
+  }).catch(err => {
+    // Content script might not be ready yet, that's ok
+    console.log('DotDrop: Could not show banner (content script not ready)');
+  });
+  
   // Update icon to warning state
   updateIcon(tabId, true);
 }
