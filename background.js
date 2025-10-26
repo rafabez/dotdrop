@@ -269,6 +269,10 @@ async function scanUrl(url, tabId) {
   
   if (foundFiles.length > 0) {
     handleDetection(baseUrl, foundFiles, tabId);
+  } else {
+    // Site is clean - show green icon
+    updateIcon(tabId, 'safe');
+    updateBadge(tabId, 0);
   }
 }
 
@@ -302,7 +306,7 @@ function handleDetection(domain, files, tabId) {
   updateBadge(tabId, files.length);
   
   // Update icon to warning state
-  updateIcon(tabId, true);
+  updateIcon(tabId, 'warning');
 }
 
 // Function to update badge
@@ -318,8 +322,16 @@ function updateBadge(tabId, count) {
 }
 
 // Function to update icon
-function updateIcon(tabId, hasExposure) {
-  const iconPath = hasExposure ? 'icons/icon-warning' : 'icons/icon';
+function updateIcon(tabId, status) {
+  // status: 'safe' (green), 'warning' (red), or false (orange)
+  let iconPath = 'icons/icon'; // default orange
+  
+  if (status === 'safe') {
+    iconPath = 'icons/icon-safe';
+  } else if (status === 'warning' || status === true) {
+    iconPath = 'icons/icon-warning';
+  }
+  
   chrome.action.setIcon({
     tabId: tabId,
     path: {

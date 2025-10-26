@@ -11,16 +11,20 @@ except ImportError:
     print("PIL/Pillow not found. Install with: pip install Pillow")
     exit(1)
 
-def create_icon(size, is_warning=False):
-    """Create an icon of the specified size"""
+def create_icon(size, icon_type='normal'):
+    """Create an icon of the specified size
+    icon_type: 'normal' (orange), 'warning' (red), 'safe' (green)
+    """
     # Create image with transparent background
     img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     
     # Colors - Hacker theme
-    if is_warning:
+    if icon_type == 'warning':
         bg_color = (255, 0, 0, 255)  # Terminal red (#ff0000)
-    else:
+    elif icon_type == 'safe':
+        bg_color = (0, 255, 65, 255)  # Matrix green (#00ff41)
+    else:  # normal
         bg_color = (255, 119, 0, 255)  # Hacker orange (#ff7700)
     
     # Draw circle background
@@ -77,17 +81,23 @@ def main():
     
     sizes = [16, 32, 48, 128]
     
-    # Generate normal icons
+    # Generate normal icons (orange)
     for size in sizes:
-        img = create_icon(size, is_warning=False)
+        img = create_icon(size, icon_type='normal')
         img.save(f'{icons_dir}/icon{size}.png')
-        print(f'Generated icon{size}.png')
+        print(f'Generated icon{size}.png (orange)')
     
-    # Generate warning icons
+    # Generate warning icons (red)
     for size in sizes:
-        img = create_icon(size, is_warning=True)
+        img = create_icon(size, icon_type='warning')
         img.save(f'{icons_dir}/icon-warning{size}.png')
-        print(f'Generated icon-warning{size}.png')
+        print(f'Generated icon-warning{size}.png (red)')
+    
+    # Generate safe icons (green)
+    for size in sizes:
+        img = create_icon(size, icon_type='safe')
+        img.save(f'{icons_dir}/icon-safe{size}.png')
+        print(f'Generated icon-safe{size}.png (green)')
     
     print('\nAll icons generated successfully!')
 
