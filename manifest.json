@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "DotDrop - Sensitive File Detector",
-  "version": "1.0.0",
-  "description": "Detects exposed sensitive files like .git, .env, SSH keys, and configuration files on websites you visit",
+  "version": "1.1.0",
+  "description": "Detects exposed sensitive files like .git, .env, SSH keys, and configuration files. Features: traffic light alerts, scan progress, severity filtering, batch scanning, and export to JSON/CSV/Markdown",
   "permissions": [
     "webRequest",
     "storage",

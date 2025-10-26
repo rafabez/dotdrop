@@ -2,7 +2,7 @@
 
 **Browser extension that detects exposed sensitive files on websites**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/interzone/dotdrop)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue)](https://github.com/interzone/dotdrop)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Chrome](https://img.shields.io/badge/Chrome-Compatible-brightgreen)](https://www.google.com/chrome/)
 [![Firefox](https://img.shields.io/badge/Firefox-Compatible-orange)](https://www.mozilla.org/firefox/)
@@ -15,7 +15,14 @@ DotDrop automatically scans websites for exposed sensitive files like `.git`, `.
 
 **Key Features:**
 - 🔍 Detects 80+ types of sensitive files
-- 🚨 Real-time alerts with badge counter
+- 🚨 Real-time alerts with traffic light system (🟢🟠🔴)
+- 📊 Live scan progress tracking
+- 📋 One-click copy findings to clipboard
+- 🎯 Severity filtering (All/Critical/Medium/Low)
+- ⏱️ Detection age/freshness timestamps
+- 🥷 Stealth mode for production sites
+- 📦 Batch domain scanning
+- 📤 Export as JSON/CSV/Markdown
 - 🎨 Professional terminal-style UI
 - 🔒 100% local - zero data collection
 - ⚡ Lightweight and fast
@@ -67,9 +74,16 @@ DotDrop checks for exposed:
 
 ## 📊 Alert System
 
+**Traffic Light Icon System:**
+- 🟢 **GREEN** - Site scanned, no vulnerabilities found
+- 🟠 **ORANGE** - Default state, not yet scanned
+- 🔴 **RED** - Vulnerable files detected!
+
 **Visual Indicators:**
-- 🔴 **Badge Counter** - Shows number of exposed files
-- 🎨 **Severity Colors** - Critical (red), Medium (orange), Low (blue)
+- 🔢 **Badge Counter** - Shows number of exposed files
+- ⏱️ **Time Ago** - "2h ago", "3d ago" freshness indicators
+- 🎨 **Severity Colors** - Critical (red), Medium (yellow), Low (blue)
+- 📊 **Progress Bar** - Real-time scan progress
 - 👁️ **Detailed Popup** - Click icon to see all findings
 
 **Severity Levels:**
@@ -79,13 +93,69 @@ DotDrop checks for exposed:
 
 ---
 
-## ⚙️ Settings
+## ⚙️ Features
 
-Access via extension popup → "⚙️ Settings"
+### **Popup Interface**
 
+**📊 Live Scan Progress**
+- Real-time progress counter (e.g., "42/80")
+- Shows current/total paths being checked
+- Updates every 500ms during active scans
+- Automatically hides when scan completes
+
+**🎯 Severity Filtering**
+- Filter by: All, Critical, Medium, or Low
+- Live count badges for each severity level
+- One-click toggle between filters
+- Only visible when detections exist
+
+**📋 Copy Findings**
+- One-click copy to clipboard
+- Formatted as Markdown report
+- Includes timestamps and severity breakdown
+- Perfect for bug bounty submissions
+
+**⏱️ Freshness Indicators**
+- Human-readable timestamps ("2h ago", "3d ago")
+- Shows detection age for each finding
+- Helps track remediation progress
+- Auto-updates relative time
+
+### **Settings Page**
+
+**🚀 Scan Settings**
 - **Auto Scan**: Automatically scan pages on load
 - **Critical Only**: Show only critical severity alerts
-- **Detection History**: View all past findings
+- **Stealth Mode**: Slower scanning with 500ms delays to avoid detection
+
+**📊 Statistics Dashboard**
+- Total sites scanned
+- Breakdown by severity (Critical/Medium/Low)
+- Most common vulnerability category
+- Visual cards with color coding
+
+**🎯 Pattern Groups**
+- Enable/disable specific detection categories
+- VCS, ENV, SSH, AWS, Docker, Database, Secrets, Config, Backup, CI, Shell
+- Customize what to scan for your needs
+- Reduce noise from unwanted checks
+
+**📦 Batch Domain Scan**
+- Scan multiple URLs at once
+- Paste list of domains (one per line)
+- Progress tracking with live counter
+- Background tab processing
+
+**📤 Export Options**
+- **JSON**: Raw data export for automation
+- **CSV**: Spreadsheet-compatible format
+- **Markdown**: Formatted security report
+- Direct download from browser
+
+**📜 Detection History**
+- View all past findings
+- Organized by domain
+- Clear history option
 
 ---
 
@@ -132,15 +202,32 @@ cd test-site
 **Project Structure:**
 ```
 dotdrop/
-├── manifest.json       # Extension configuration
-├── background.js       # Detection logic
-├── popup.html/js       # Extension popup
-├── options.html/js     # Settings page
-├── content.js          # Content script
-├── icons/              # Extension icons
-├── test-site/          # Mock vulnerable site
-└── docs/               # Documentation
+├── manifest.json         # Extension configuration
+├── background.js         # Detection logic & scanning engine
+├── popup.html/js         # Extension popup with filters & progress
+├── options.html/js       # Settings page with stats & export
+├── popup.css             # Popup styling (terminal theme)
+├── options.css           # Options page styling
+├── generate_icons.py     # Icon generator (orange/red/green)
+├── icons/                # Extension icons (3 states)
+│   ├── icon*.png         # Orange (default)
+│   ├── icon-warning*.png # Red (vulnerable)
+│   └── icon-safe*.png    # Green (clean)
+├── test-site/            # Mock vulnerable site for testing
+└── docs/                 # Documentation
+    ├── QUICKSTART.md
+    ├── INSTALLATION_GUIDE.md
+    ├── DESIGN.md
+    ├── CONTRIBUTING.md
+    └── BROWSER_LIMITATIONS.md
 ```
+
+**Technical Stack:**
+- Pure JavaScript (no frameworks)
+- Chrome Extension Manifest V3
+- Local storage for settings & history
+- Fetch API for file detection
+- 5-layer validation to prevent false positives
 
 ---
 
@@ -166,6 +253,36 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## ⚠️ Disclaimer
 
 This tool is for **ethical security research and educational purposes only**. Always obtain proper authorization before testing websites you don't own.
+
+---
+
+## 🆕 Recent Updates
+
+**Version 1.1.0** - Major Feature Release
+
+**New Features:**
+- ✅ Traffic light icon system (🟢🟠🔴)
+- ✅ Real-time scan progress tracking
+- ✅ One-click copy findings to clipboard
+- ✅ Severity filtering (All/Critical/Medium/Low)
+- ✅ Detection age/freshness indicators
+- ✅ Stealth mode for production sites
+- ✅ Batch domain scanning
+- ✅ Export as JSON/CSV/Markdown
+- ✅ Statistics dashboard
+- ✅ Pattern groups toggle
+
+**Bug Fixes:**
+- 🐛 Fixed false positives (5-layer validation)
+- 🐛 Fixed "View All" button not working
+- 🐛 Fixed detection history not saving
+- 🐛 Fixed paths not displaying correctly
+
+**Technical Improvements:**
+- Robust content validation
+- Better error handling
+- Improved scan performance
+- Enhanced UI/UX
 
 ---
 
