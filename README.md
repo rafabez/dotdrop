@@ -237,6 +237,44 @@ Contributions welcome! Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md) first
 
 ---
 
+## 🔒 Privacy
+
+**DotDrop respects your privacy completely:**
+
+- ✅ **Zero Data Collection** - We don't collect, store, or transmit any user data
+- ✅ **100% Local Processing** - All scanning and analysis happens on your device
+- ✅ **No Analytics** - No tracking, no telemetry, no phone-home
+- ✅ **No External Servers** - Extension never contacts our servers or third parties
+- ✅ **Local Storage Only** - Settings and scan history stored locally using `chrome.storage.local`
+- ✅ **User Control** - Clear all data anytime with the "Clear History" button
+- ✅ **Open Source** - Inspect the code yourself on GitHub
+
+### What Data is Stored Locally?
+
+The extension stores the following **only on your device**:
+- User preferences (auto-scan, stealth mode settings)
+- Detection history (which sites had vulnerabilities)
+- Statistics (count of vulnerable sites found)
+
+### Network Requests
+
+The extension makes HTTP requests **only** to websites you're actively scanning:
+- Requests go directly to the target website being scanned
+- Used to check if sensitive files exist (e.g., `/.git/config`, `/.env`)
+- No requests to external analytics or tracking services
+- All user-initiated (automatic or manual scan)
+
+### Permissions Explained
+
+- **activeTab**: Access current tab URL to scan for vulnerabilities
+- **storage**: Save your settings and scan history locally
+- **webRequest**: Validate HTTP responses for accurate detection
+- **host_permissions**: Scan any website for security issues (user-initiated)
+
+**Your privacy is our priority. We built DotDrop to be a trustworthy security tool.**
+
+---
+
 ## 📜 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
