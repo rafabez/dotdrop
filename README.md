@@ -160,8 +160,9 @@ DotDrop checks for exposed:
 - ✅ **Open Source** - Inspect the code yourself
 
 **Permissions:**
-- `activeTab`: To scan the current page
-- `storage`: To save your settings
+- `activeTab`: Access current tab to scan for vulnerabilities
+- `storage`: Save your settings and scan history locally
+- `host_permissions (<all_urls>)`: Scan any website for security issues (user-initiated)
 
 ---
 
@@ -268,8 +269,7 @@ The extension makes HTTP requests **only** to websites you're actively scanning:
 
 - **activeTab**: Access current tab URL to scan for vulnerabilities
 - **storage**: Save your settings and scan history locally
-- **webRequest**: Validate HTTP responses for accurate detection
-- **host_permissions**: Scan any website for security issues (user-initiated)
+- **host_permissions (<all_urls>)**: Scan any website for security issues (user-initiated)
 
 **Your privacy is our priority. We built DotDrop to be a trustworthy security tool.**
 

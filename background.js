@@ -460,6 +460,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
   
+  if (request.action === 'scanSpecificTab') {
+    // For batch scanning - scan a specific tab by ID
+    const { tabId, url } = request;
+    if (tabId && url) {
+      scanUrl(url, tabId).then(() => {
+        sendResponse({ success: true });
+      }).catch((error) => {
+        sendResponse({ success: false, error: error.message });
+      });
+    } else {
+      sendResponse({ success: false, error: 'Missing tabId or url' });
+    }
+    return true;
+  }
+  
   if (request.action === 'getDetections') {
     sendResponse({ detectedSites });
     return true;

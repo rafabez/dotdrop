@@ -263,10 +263,37 @@ async function batchScan() {
   let completed = 0;
   for (const url of urls) {
     try {
-      // Open each URL in a new tab and scan it
+      // Open each URL in a new background tab
       const tab = await chrome.tabs.create({ url, active: false });
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for page load
-      await chrome.runtime.sendMessage({ action: 'scanCurrentSite' });
+      
+      // Wait for the tab to finish loading
+      await new Promise((resolve) => {
+        const listener = (tabId, changeInfo) => {
+          if (tabId === tab.id && changeInfo.status === 'complete') {
+            chrome.tabs.onUpdated.removeListener(listener);
+            resolve();
+          }
+        };
+        chrome.tabs.onUpdated.addListener(listener);
+        
+        // Fallback timeout in case the tab never loads
+        setTimeout(resolve, 10000);
+      });
+      
+      // Scan the specific tab and wait for completion
+      await new Promise((resolve) => {
+        chrome.runtime.sendMessage(
+          { action: 'scanSpecificTab', tabId: tab.id, url: tab.url },
+          (response) => {
+            resolve(response);
+          }
+        );
+      });
+      
+      // Wait a bit more to ensure scan completes
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Close the tab
       await chrome.tabs.remove(tab.id);
       
       completed++;

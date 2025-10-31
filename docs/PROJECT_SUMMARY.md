@@ -222,11 +222,9 @@ zip -r dotdrop.zip . -x "*.git*" "*.md" "generate_icons.py"
 - ✅ Open source code
 
 ### Permissions Used
-- `webRequest`: Monitor page loads
-- `storage`: Save settings & history
-- `notifications`: Show alerts
-- `activeTab`: Access current tab
-- `<all_urls>`: Scan any website
+- `storage`: Save settings & history locally
+- `activeTab`: Access current tab to scan for vulnerabilities
+- `<all_urls>`: Scan any website for security issues (user-initiated)
 
 ### Security Features
 - Content Security Policy compliant

@@ -4,7 +4,6 @@
   "version": "1.1.0",
   "description": "Detects exposed sensitive files (.git, .env, SSH keys, AWS credentials). Essential security tool for researchers & developers.",
   "permissions": [
-    "webRequest",
     "storage",
     "activeTab"
   ],
